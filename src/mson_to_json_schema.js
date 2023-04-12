@@ -32,7 +32,7 @@ function convert(mson, options) {
                 return { type: 'array', items: { 'anyOf': mson.content.map((m) => convert(m, options)) } };
             }
         case 'enum':
-            return convertEnum(mson.content);
+            return convertEnum(mson.content ? mson.content : mson.attributes);
         case 'object':
             break;
         case 'boolean':
@@ -72,7 +72,7 @@ function convert(mson, options) {
                         break;
                     case 'nullable':
                         if (propertySchema.$ref) {
-                            propertySchema = {oneOf: [propertySchema, {type: 'null'}]};
+                            propertySchema = { oneOf: [propertySchema, { type: 'null' }] };
                         } else {
                             propertySchema.type = [propertySchema.type, 'null']
                         }
